@@ -23,10 +23,11 @@ class App extends Component{
     return (
       <form>
         <center>
-          <h1>Feed the Munchies</h1>
-          <h5>Please Select Anything that Interests You!</h5>
+          <div id="header" style={{backgroundImage: 'url("back.png")', backgroundRepeat: "no-repeat", backgroundPosition: "bottom"}}>
+          <h3>What are you in the mood for?</h3>
+          <h4>Select all that apply.</h4>
           <label>
-            Do you want to eat Italian?
+            Italian
             <input type="checkbox"
               checked={wantItalian}
               name="wantItalian"
@@ -34,7 +35,7 @@ class App extends Component{
           </label>
           <br/>
           <label>
-            Do you want to eat Mexican?
+            Mexican
             <input type="checkbox"
               checked={wantMexican}
               name="wantMexican"
@@ -42,7 +43,7 @@ class App extends Component{
           </label>
           <br/>
           <label>
-            Do you want to eat Chinese?
+            Chinese
             <input type="checkbox"
               checked={wantChinese}
               name="wantChinese"
@@ -50,7 +51,7 @@ class App extends Component{
           </label>
           <br/>
           <label>
-            Do you want to eat Indian?
+            Indian
             <input type="checkbox"
               checked={wantIndian}
               name="wantIndian"
@@ -58,7 +59,7 @@ class App extends Component{
           </label>
           <br/>
           <label>
-            Do you want to eat American?
+            American
             <input type="checkbox"
               checked={wantAmerican}
               name="wantAmerican"
@@ -66,7 +67,7 @@ class App extends Component{
           </label>
           <br/>
           <label>
-            Do you want to eat Healthy?
+            Healthy
             <input type="checkbox"
               checked={wantHealthy}
               name="wantHealthy"
@@ -74,14 +75,15 @@ class App extends Component{
           </label>
           <br/>
           <label>
-            Do you want to eat Sushi?
+            Sushi
             <input type="checkbox"
               checked={wantSushi}
               name="wantSushi"
               onChange={this.onChange}/>
           </label>
           <br/>
-          <button variant="success">Generate Locations</button> {' '}
+          <button id="button" variant="success">Generate Locations</button> {' '}
+          </div>
         </center>
       </form>
     )

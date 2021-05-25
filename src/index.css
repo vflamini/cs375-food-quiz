@@ -5,10 +5,42 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f1c466;
+  background-color:#fdfcfa;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+#header {
+  background-color:lightgray;
+  width: 800px;
+  margin-top: 140px;
+
+  border-style: solid;
+  border-color: lightslategray;
+  border-width: 1px;
+}
+
+h3 {
+  font-family: 'Trebuchet MS';
+  font-size: 25px;
+  text-align: left;
+  padding-left: 60px;
+}
+
+h4 {
+  font-family: 'Trebuchet MS';
+  text-align: left;
+  padding-left: 190px;
+}
+
+label {
+  font-family: 'Trebuchet MS';
+  font-size: 30px;
+  display: inline-block;
+  width: 70%;
+  text-align: right;
+}
+
