@@ -23,7 +23,7 @@ class App extends Component{
     return (
       <form>
         <center>
-          <div id="header" style={{backgroundImage: 'url("back.png")', backgroundRepeat: "no-repeat", backgroundPosition: "bottom"}}>
+          <div id="header" style={{backgroundImage: 'url("table2.png")', backgroundRepeat: "no-repeat", backgroundPosition: "bottom"}}>
           <h3>What are you in the mood for?</h3>
           <h4>Select all that apply.</h4>
           <label>
