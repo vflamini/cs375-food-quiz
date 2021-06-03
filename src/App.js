@@ -13,14 +13,15 @@ class App extends Component{
     options : []
   };
 
-  getRestaurants = () => {
-    let cuisine = 'italian'
-    fetch('http://localhost:3001/?cuisine=italian').then(response => {
-      console.log("response:")
-      console.log(response.text())
-      return response;
+  getRestaurants = (cuisine) => {
+    fetch(`http://localhost:3001/?cuisine=${cuisine}`).then(response => {
+      return response.text();
     })
     .then(data => {
+      let jsondata = JSON.parse(data)
+      for (const d of jsondata){
+        this.state.restaurants.push(d);
+      }
     })
   }
 
@@ -60,13 +61,12 @@ class App extends Component{
 
   handleClick = (e) => {
     e.preventDefault();
-    this.getRestaurants();
-    this.createRestaurant('mexican','Distrito','https://www.distritophilly.com/')
     const opts = this.state.options
-    let restaurantData = []
     for (const varName of opts){
-      let cuisine = varName.substr(4,varName.length-1)
+      let cuisine = varName.substr(4,varName.length-1).toLowerCase()
+      this.getRestaurants(cuisine)
     }
+    console.log(this.state.restaurants)
   }
   
   render(){
