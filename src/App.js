@@ -61,6 +61,7 @@ class App extends Component{
 
   handleClick = (e) => {
     e.preventDefault();
+    this.state.restaurants = []
     const opts = this.state.options
     for (const varName of opts){
       let cuisine = varName.substr(4,varName.length-1).toLowerCase()
