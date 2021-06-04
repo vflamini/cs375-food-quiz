@@ -61,15 +61,16 @@ class App extends Component{
 
   handleClick = (e) => {
     e.preventDefault();
-    this.state.restaurants = []
     const opts = this.state.options
     for (const varName of opts){
       let cuisine = varName.substr(4,varName.length-1).toLowerCase()
       this.getRestaurants(cuisine)
     }
     console.log(this.state.restaurants)
+    document.getElementById("json").textContent = JSON.stringify(this.state.restaurants)
+    this.state.restaurants = []
   }
-  
+
   render(){
     const {wantItalian, wantMexican, wantChinese, wantIndian, wantAmerican, wantHealthy, wantSushi} = this.state;
     return (
@@ -135,6 +136,9 @@ class App extends Component{
           </label>
           <br/>
           <button id="button" variant="success" onClick={(e) => {this.handleClick(e)}}>Generate Locations</button> {' '}
+          </div>
+          <div>
+            <pre id="json"></pre>
           </div>
         </center>
       </form>
