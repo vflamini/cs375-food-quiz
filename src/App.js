@@ -67,7 +67,18 @@ class App extends Component{
       this.getRestaurants(cuisine)
     }
     console.log(this.state.restaurants)
-    document.getElementById("json").textContent = JSON.stringify(this.state.restaurants)
+    const data = JSON.stringify(this.state.restaurants)
+    let copy = data
+    copy = copy.replaceAll("[","")
+    copy = copy.replaceAll("]","")
+    copy = copy.replaceAll("{","")
+    copy = copy.replaceAll("}","")
+    copy = copy.replaceAll("\"", "")
+    let formatted = copy.split(",").join("\n")
+    formatted = formatted.split("cuisine:").join("\n")
+    formatted = formatted.split("name:").join("")
+    formatted = formatted.split("website:").join("")
+    document.getElementById("json").textContent = formatted
     this.state.restaurants = []
   }
 
@@ -76,6 +87,7 @@ class App extends Component{
     return (
       <form>
         <center>
+          <h1>Feed the Munchies</h1>
           <div id="header" style={{backgroundImage: 'url("table2.png")', backgroundRepeat: "no-repeat", backgroundPosition: "bottom"}}>
           <h3>What are you in the mood for?</h3>
           <h4>Select all that apply.</h4>
@@ -138,6 +150,17 @@ class App extends Component{
           <button id="button" variant="success" onClick={(e) => {this.handleClick(e)}}>Generate Locations</button> {' '}
           </div>
           <div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Cuisine</th>
+                  <th>Name</th>
+                  <th>Website</th>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
             <pre id="json"></pre>
           </div>
         </center>
