@@ -9,7 +9,7 @@ app.use(express.json());
 app.use(express.static("public_html"));
 
 // imports database environment variables
-const connection = require("../env.json");
+const connection = require("/env.json");
 
 // creates new connection pool
 const Pool = pg.Pool;
@@ -18,10 +18,21 @@ pool.connect().then(function () {
     console.log("Connected!");
 });
 
+
+
 app.get("/", function (req, res) {
-    // TODO extract species from query
-    let spec = req.query.species;
-    let jsonData = {};
+    $.ajax({
+        url: "/RestaurantList.csv",
+        async: false,
+        success: function (csvd) {
+            data = $.csv.toArrays(csvd);
+            console.log(array)
+        },
+        dataType: "text",
+        complete: function () {
+            // call a function on complete 
+        }
+    });
     res.send();
 });
 
