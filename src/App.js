@@ -157,6 +157,11 @@ class App extends Component{
       this.createTable()
       this.buildDatabase();
     }
+    var output = document.getElementById("output");
+    var tag = document.createElement("p");
+    var words = document.createTextNode("Here are the restaurants we think you'd like!");
+    tag.appendChild(words);
+    output.appendChild(tag);
     let rests = [];
     let rest;
     const opts = this.state.options
@@ -243,18 +248,7 @@ class App extends Component{
           <br/>
           <button id="button" variant="success" onClick={(e) => {this.handleClick(e)}}>Generate Locations</button> {' '}
           </div>
-          <div>
-            <table>
-              <thead>
-                <tr>
-                  <th>Cuisine</th>
-                  <th>Name</th>
-                  <th>Website</th>
-                </tr>
-              </thead>
-              <tbody>
-              </tbody>
-            </table>
+          <div id="output">
             <pre id="json"></pre>
           </div>
         </center>
