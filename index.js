@@ -61,15 +61,61 @@ app.post("/restaurants", function (req, res) {
         res.status(500);
         res.send();
     });
-    console.log(body);
-    res.send();
+});
+
+app.get("/droptable", function (req, res) {
+  let body = req.body;
+  
+  pool.query(
+      `DROP TABLE restaurants`
+  ).then(function (response) {
+      res.send()
+      res.status(200)
+  })
+  .catch(function (error) {
+      console.log(error);
+      res.status(500);
+      res.send();
+  });
+});
+
+app.get("/createtable", function (req, res) {
+  let body = req.body;
+  
+  pool.query(
+      `CREATE TABLE restaurants(cuisine VARCHAR(75),name VARCHAR(75),website VARCHAR(75))`
+  ).then(function (response) {
+      res.send()
+      res.status(200)
+  })
+  .catch(function (error) {
+      console.log(error);
+      res.status(500);
+      res.send();
+  });
+});
+
+app.get("/tableexists", function (req, res) {
+  let body = req.body;
+  
+  pool.query(
+      `SELECT to_regclass('public.restaurants');`
+  ).then(function (response) {
+      res.send(response.rows)
+      res.status(200)
+  })
+  .catch(function (error) {
+      console.log(error);
+      res.status(500);
+      res.send();
+  });
 });
 
 app.get("/", function (req, res) {
-    // TODO extract species from query
+
     let cuisine = req.query.cuisine;
     let rows = null;
-    // TODO run query selecting all animals with species
+
     pool.query(
         `SELECT * FROM restaurants WHERE cuisine = $1`,
         [cuisine]
@@ -85,8 +131,7 @@ app.get("/", function (req, res) {
         res.status(500);
         res.send();
     });
-    // TODO return rows to user
-    //res.send(rows);
+
 });
 
 app.listen(port, () => {
