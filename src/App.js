@@ -9,19 +9,60 @@ class App extends Component{
     wantAmerican: false,
     wantHealthy : false,
     wantSushi   : false,
+    rest        : "",
     restaurants : [],
-    options : []
+    options     : []
   };
 
-  getRestaurants = (cuisine) => {
-    fetch(`http://localhost:3001/?cuisine=${cuisine}`).then(response => {
+
+  formatRestaurants = () => {
+    let combined = "";
+    for (const rest of this.state.restaurants){
+      const data = JSON.stringify(rest)
+      let copy = data
+      copy = copy.replaceAll("[","")
+      copy = copy.replaceAll("]","")
+      copy = copy.replaceAll("{","")
+      copy = copy.replaceAll("}","")
+      copy = copy.replaceAll("\"", "")
+      let formatted = copy.split(",").join("\n")
+      formatted = formatted.split("cuisine:").join("\n")
+      formatted = formatted.split("name:").join("")
+      formatted = formatted.split("website:").join("")
+      combined = combined.concat(formatted,"\n","\n")
+      
+    }
+    
+    document.getElementById("json").textContent = combined
+    
+  }
+
+  doesTableExist(){
+    return fetch(`http://localhost:3001/tableexists`).then(response => {
+      return response.text()
+    })
+    .then(data => {
+      return JSON.parse(data)[0].to_regclass
+    })
+  }
+
+  getRestaurants(cuisine) {
+    //let rests = []
+    return fetch(`http://localhost:3001/?cuisine=${cuisine}`).then(response => {
       return response.text();
     })
     .then(data => {
+      let rests = []
       let jsondata = JSON.parse(data)
       for (const d of jsondata){
-        this.state.restaurants.push(d);
+        //this.state.restaurants.push(d);
+        rests.push(d)
+        //this.setState({rest : d})
+        //this.setState({restaurants : this.state.restaurants.concat(this.state.rest)}, this.formatRestaurants());
       }
+      //console.log(rests.slice())
+      return rests
+      //this.setState({restaurants : rests});
     })
   }
 
@@ -42,6 +83,54 @@ class App extends Component{
       });
   }
 
+  dropTable = () => {
+    fetch('http://localhost:3001/droptable', {
+    })
+  }
+
+  createTable = () =>{
+    fetch('http://localhost:3001/createtable', {
+    })
+  }
+
+  buildDatabase = () => {
+    this.createRestaurant('italian','La Fontana Della Citta','https://www.lafontanadellacitta.com/')
+    this.createRestaurant('italian','Maggiano\'s Little Italy','https://www.maggianos.com/')
+    this.createRestaurant('italian','Osteria','https://www.osteriaphilly.com/')
+    this.createRestaurant('italian','Giorgio On Pine','http://www.giorgioonpine.com/')
+    this.createRestaurant('italian','Pietro\'s Italian','https://pietrospizza.com/')
+    this.createRestaurant('mexican','Distrito','https://www.distritophilly.com/')
+    this.createRestaurant('mexican','Rosy\'s Taco Bar','https://rosystacobar.com/')
+    this.createRestaurant('mexican','Mission Taqueria','https://www.missiontaqueria.com/')
+    this.createRestaurant('mexican','El Vez','https://elvezrestaurant.com/')
+    this.createRestaurant('mexican','El Ray','https://elreyrestaurant.com/')
+    this.createRestaurant('chinese','Han Dynasty','https://handynasty.net/')
+    this.createRestaurant('chinese','Sang Kee Noodle House','https://sangkeenoodlehouse.com/')
+    this.createRestaurant('chinese','Dim Sum & Noodle','https://www.dimsumandnoodle.com/')
+    this.createRestaurant('chinese','Mandarin Palace','https://www.phillymandarinpalace.com/')
+    this.createRestaurant('chinese','Nom Wah ','https://nomwah.com/')
+    this.createRestaurant('indian','Tiffin Indian Cuisine','https://order.tiffin.com/')
+    this.createRestaurant('indian','Veda','https://vedaphilly.com/')
+    this.createRestaurant('indian','Ekta Indian Cuisine','https://www.ektaindianrestaurant.com/')
+    this.createRestaurant('indian','Ateethi','http://ateethirestaurantpa.com/')
+    this.createRestaurant('indian','Thanal Indian Tavern','https://www.thanalphilly.com/')
+    this.createRestaurant('american','New Deck Tavern','https://www.newdecktavern.com/')
+    this.createRestaurant('american','White Dog Cafe','https://whitedog.com/location/')
+    this.createRestaurant('american','Butcher Bar','http://www.butcherbarphilly.com/')
+    this.createRestaurant('american','Yards Brewing Company','https://yardsbrewing.com/')
+    this.createRestaurant('american','The Love.','https://theloverestaurant.com/')
+    this.createRestaurant('healthy','The Quick Fixx','https://thequickfixx.com/')
+    this.createRestaurant('healthy','P.S. & Co.','https://www.puresweets.com/')
+    this.createRestaurant('healthy','Just Salad','https://www.justsalad.com/')
+    this.createRestaurant('healthy','Freshii','https://www.freshii.com/ca/en-ca/home')
+    this.createRestaurant('healthy','Crisp Kitchen','https://www.crispkitchen.com/')
+    this.createRestaurant('sushi','Crazy Shushi','https://www.phillycrazysushi.com/')
+    this.createRestaurant('sushi','Morimoto','https://morimotorestaurant.com/')
+    this.createRestaurant('sushi','Pod','https://podrestaurant.com/')
+    this.createRestaurant('sushi','Zama','http://www.zamaphilly.com/')
+    this.createRestaurant('sushi','Double Knot','https://www.doubleknotphilly.com/')
+  }
+
   onChange = e => {
     const options = this.state.options
     let i
@@ -59,28 +148,33 @@ class App extends Component{
     this.setState({options: options})
   }
 
-  handleClick = (e) => {
+  
+
+  handleClick = async (e) => {
     e.preventDefault();
+    let tableName = await this.doesTableExist();
+    if (tableName !== "restaurants"){
+      this.createTable()
+      this.buildDatabase();
+    }
+    let rests = [];
+    let rest;
     const opts = this.state.options
+    this.setState({restaurants : []});
     for (const varName of opts){
       let cuisine = varName.substr(4,varName.length-1).toLowerCase()
-      this.getRestaurants(cuisine)
+      //console.log(this.getRestaurants(cuisine).slice())
+      rest = await this.getRestaurants(cuisine);
+      rests = rests.concat(rest)
+      
     }
-    console.log(this.state.restaurants)
-    const data = JSON.stringify(this.state.restaurants)
-    let copy = data
-    copy = copy.replaceAll("[","")
-    copy = copy.replaceAll("]","")
-    copy = copy.replaceAll("{","")
-    copy = copy.replaceAll("}","")
-    copy = copy.replaceAll("\"", "")
-    let formatted = copy.split(",").join("\n")
-    formatted = formatted.split("cuisine:").join("\n")
-    formatted = formatted.split("name:").join("")
-    formatted = formatted.split("website:").join("")
-    document.getElementById("json").textContent = formatted
-    this.state.restaurants = []
+    this.setState({restaurants : rests},function (){
+      this.formatRestaurants();
+    });
+    
   }
+
+  
 
   render(){
     const {wantItalian, wantMexican, wantChinese, wantIndian, wantAmerican, wantHealthy, wantSushi} = this.state;
